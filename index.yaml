@@ -1,0 +1,8 @@
+name: terraform-aws-portworx
+type: terraform
+description: 'Module to provision terraform-aws-portworx on '
+tags:
+  - tools
+  - devops
+versions: []
+id: github.com/cloud-native-toolkit/terraform-any-terraform-aws-portworx
