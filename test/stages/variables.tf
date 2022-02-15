@@ -22,6 +22,16 @@ variable "server_url" {
   type        = string
 }
 
+variable "access_key" {
+  type    = string
+  default = ""
+}
+
+variable "secret_key" {
+  type    = string
+  default = ""
+}
+
 
 variable "px_cluster_id" {
   type        = string
