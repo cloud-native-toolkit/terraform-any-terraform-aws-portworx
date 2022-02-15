@@ -4,6 +4,7 @@
 variable "region" {
   type        = string
   description = "Region for VLANs defined in private_vlan_number and public_vlan_number."
+  default="us-west-2"
 }
 
 
