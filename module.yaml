@@ -1,6 +1,6 @@
 name: terraform-aws-portworx
 type: terraform
-description: 'Module to provision terraform-aws-portworx on '
+description: 'Module to provision terraform-aws-portworx on a redhat rosa cluster'
 tags:
   - tools
   - devops
