@@ -38,7 +38,7 @@ spec:
   - name: "access_key"
     value: "${var.access_key}"
   - name: "AWS_SECRET_ACCESS_KEY"
-    value: "${var.aws_secret_access_key}"
+    value: "${var.secret_key}"
   - name: "AWS_CMK"
     value: "${aws_kms_key.px_key.key_id}"
   - name: "AWS_REGION"
