@@ -1,10 +1,10 @@
 
-variable "access_key" {
+variable "aws_aws_access_key_id_id" {
   type    = string
   default = ""
 }
 
-variable "secret_key" {
+variable "aws_secret_access_key" {
   type    = string
   default = ""
 }

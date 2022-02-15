@@ -35,10 +35,10 @@ spec:
   deleteStrategy:
     type: UninstallAndWipe
   env:
-  - name: "access_key"
-    value: "${var.access_key}"
-  - name: "AWS_SECRET_ACCESS_KEY"
-    value: "${var.secret_key}"
+  - name: "aws_access_key_id"
+    value: "${var.aws_access_key_id}"
+  - name: "AWS_SECRET_aws_access_key_id"
+    value: "${var.aws_secret_access_key}"
   - name: "AWS_CMK"
     value: "${aws_kms_key.px_key.key_id}"
   - name: "AWS_REGION"

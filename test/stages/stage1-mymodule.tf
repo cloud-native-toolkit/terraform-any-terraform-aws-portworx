@@ -12,8 +12,8 @@ module "dev_tools_mymodule" {
   source = "./module"
 
   region                = var.region
-  access_key            = var.access_key
-  secret_key            = var.secret_key
+  aws_access_key_id            = var.access_key
+  aws_secret_access_key            = var.secret_key
   server_url            = var.server_url
   cluster_username      = var.cluster_username
   cluster_password      = var.cluster_password

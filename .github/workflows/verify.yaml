@@ -35,10 +35,10 @@ jobs:
           clusterId: ${{ matrix.testcase }}
           validateDeployScript: .github/scripts/validate-deploy.sh
         env:
-          TF_VAR_access_key: ${{ secrets.access_key }}
-          TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          access_key: ${{ secrets.access_key }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          TF_VAR_aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_aws_access_key_id }}
+          aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          AWS_SECRET_aws_access_key_id: ${{ secrets.AWS_SECRET_aws_access_key_id }}
           TF_VAR_cluster_username: ${{ secrets.AWS_CLUSTER_USERNAME }}
           TF_VAR_cluster_password: ${{ secrets.AWS_CLUSTER_PASSWORD }}
 
@@ -48,10 +48,10 @@ jobs:
         with:
           clusterId: ${{ matrix.testcase }}
         env:
-          TF_VAR_access_key: ${{ secrets.access_key }}
-          TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          access_key: ${{ secrets.access_key }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          TF_VAR_aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_aws_access_key_id }}
+          aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          AWS_SECRET_aws_access_key_id: ${{ secrets.AWS_SECRET_aws_access_key_id }}
 
   verifyMetadata:
     runs-on: ubuntu-latest
