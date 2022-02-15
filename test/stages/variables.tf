@@ -31,6 +31,6 @@ variable "px_user_id" {
   type        = string
 }
 
-variable "osb_endpoint" {
+variable "px_osb_endpoint" {
   type        = string
 }
