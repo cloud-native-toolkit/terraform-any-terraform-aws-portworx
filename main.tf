@@ -64,6 +64,10 @@ resource "null_resource" "install_portworx" {
   provisioner "local-exec" {
     working_dir = "${path.module}/scripts/"
     when        = create
+    environment = {
+      AWS_ACCESS_KEY_ID = var.access_key
+      AWS_SECRET_ACCESS_KEY = var.secret_key
+    }
     command     = <<EOF
 
 echo '${module.dev_cluster.platform.kubeconfig}' > .kubeconfig
