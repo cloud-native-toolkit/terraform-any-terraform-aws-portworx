@@ -2,6 +2,8 @@
 export region=$1
 VAR=`date '+%F-%H-%M-%S'`
 
+aws configure list
+
 #Install aws CLI
 if ! [ -x "$(command -v pip)" ]; then
     curl -O https://bootstrap.pypa.io/get-pip.py > /dev/null
