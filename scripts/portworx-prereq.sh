@@ -2,8 +2,6 @@
 export region=$1
 VAR=`date '+%F-%H-%M-%S'`
 
-aws configure list
-
 #Install aws CLI
 if ! [ -x "$(command -v pip)" ]; then
     curl -O https://bootstrap.pypa.io/get-pip.py > /dev/null
@@ -13,6 +11,9 @@ fi
 if ! [ -x "$(command -v aws)" ]; then
     pip install awscli --upgrade --user > /dev/null
 fi
+
+
+aws configure list
 
 CLUSTERID=$(oc get machineset -n openshift-machine-api -o jsonpath='{.items[0].metadata.labels.machine\.openshift\.io/cluster-api-cluster}')
 #Providing permissions for all the instances in the autoscaling cluster
