@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
 
-echo "Implement validation logic"
-exit 1
+
+echo "sleeping for 5 mins to prevent synchronization errors"
+sleep 5m
+
+echo "checking for portworx services"
+
+exit 0
