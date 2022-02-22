@@ -60,32 +60,103 @@ EOF
 data "template_file" "portworx_operator" {
   template = <<EOF
 %{if var.portworx_enterprise.enable || var.portworx_essentials.enable}
----
-apiVersion: operators.coreos.com/v1alpha1
-kind: Subscription
+apiVersion: v1
+kind: ServiceAccount
 metadata:
-  generation: 1
-  name: portworx-certified
+  name: portworx-operator
+  namespace: kube-system
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: px-operator
+spec:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  volumes:
+  - secret
+  runAsUser:
+    rule: 'RunAsAny'
+  seLinux:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'RunAsAny'
+  fsGroup:
+    rule: 'RunAsAny'
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: portworx-operator
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+  - apiGroups: ["policy"]
+    resources: ["podsecuritypolicies"]
+    resourceNames: ["px-operator"]
+    verbs: ["use"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: portworx-operator
+subjects:
+- kind: ServiceAccount
+  name: portworx-operator
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: portworx-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portworx-operator
   namespace: kube-system
 spec:
-  channel: stable
-  installPlanApproval: Automatic
-  name: portworx-certified
-  source: certified-operators
-  sourceNamespace: openshift-marketplace
-  startingCSV:  portworx-operator.v1.4.4
----
-apiVersion: operators.coreos.com/v1
-kind: OperatorGroup
-metadata:
-  name: kube-system-operatorgroup
-  namespace: kube-system
-spec:
-  serviceAccount:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      name: portworx-operator
+  template:
     metadata:
-      creationTimestamp: null
-  targetNamespaces:
-  - kube-system
+      labels:
+        name: portworx-operator
+    spec:
+      containers:
+      - name: portworx-operator
+        imagePullPolicy: Always
+        image: portworx/px-operator:1.7.0
+        command:
+        - /operator
+        - --verbose
+        - --driver=portworx
+        - --leader-elect=true
+        env:
+        - name: OPERATOR_NAME
+          value: portworx-operator
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "name"
+                    operator: In
+                    values:
+                    - portworx-operator
+              topologyKey: "kubernetes.io/hostname"
+      serviceAccountName: portworx-operator
 %{endif}
 EOF
 }
