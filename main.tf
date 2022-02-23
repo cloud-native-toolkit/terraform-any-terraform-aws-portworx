@@ -59,8 +59,6 @@ module "dev_cluster" {
 resource "null_resource" "install_portworx" {
   count = var.provision ? 1 : 0
 
-  depends_on = [null_resource.portworx_cleanup_helper]
-
   triggers = {
     installer_workspace = local.installer_workspace
     region              = var.region
@@ -93,7 +91,8 @@ EOF
   depends_on = [
     local_file.portworx_operator_yaml,
     local_file.storage_classes_yaml,
-    local_file.portworx_storagecluster_yaml
+    local_file.portworx_storagecluster_yaml,
+    null_resource.portworx_cleanup_helper
   ]
 }
 
