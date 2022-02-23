@@ -74,8 +74,6 @@ echo '${module.dev_cluster.platform.kubeconfig}' > .kubeconfig
 
 pwd
 chmod +x portworx-prereq.sh
-bash portworx-prereq.sh ${self.triggers.region}
-echo "portworx_operator.yaml"
 cat ${self.triggers.installer_workspace}/portworx_operator.yaml
 oc apply -f ${self.triggers.installer_workspace}/portworx_operator.yaml
 echo "Sleeping for 5mins"
@@ -94,6 +92,39 @@ EOF
     local_file.portworx_storagecluster_yaml
   ]
 }
+
+# This cleanup script will execute **after** the resources have been reclaimed b/c 
+# the volumes and portworx resource instance depend on it.  At apply-time it doesn't do anything.
+# At destroy-time it will cleanup Portworx artifacts left in the kube cluster.
+resource "null_resource" "portworx_cleanup_helper" {
+  count = var.provision ? 1 : 0
+
+  triggers = {
+    installer_workspace = local.installer_workspace
+    region              = var.region
+  }
+
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    command     = "echo \"cleanup helper ready\""
+  }
+
+  provisioner "local-exec" {
+    # when = destroy
+    # environment = {
+    #   CLUSTER    = self.triggers.cluster_name
+    #   KUBECONFIG = self.triggers.config_path
+    #   BIN_DIR    = self.triggers.bin_dir
+    # }
+
+    interpreter = ["/bin/bash", "-c"]
+    command     = <<EOF
+echo '${module.dev_cluster.platform.kubeconfig}' > .kubeconfig
+curl -fsL https://install.portworx.com/px-wipe | bash
+EOF
+  }
+}
+
 
 resource "null_resource" "enable_portworx_encryption" {
   count = var.portworx_enterprise.enable && var.portworx_enterprise.enable_encryption ? 1 : 0
