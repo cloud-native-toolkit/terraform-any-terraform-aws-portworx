@@ -1,3 +1,7 @@
+variable "provision" {
+    default     = true
+    description = "If set to true installs Portworx on the given cluster"
+}
 
 variable "access_key" {
   type    = string

@@ -57,6 +57,7 @@ module "dev_cluster" {
 # }
 
 resource "null_resource" "install_portworx" {
+  count = var.provision ? 1 : 0
   triggers = {
     installer_workspace = local.installer_workspace
     region              = var.region
