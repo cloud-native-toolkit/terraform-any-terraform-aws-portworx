@@ -57,6 +57,8 @@ data:
 EOF
 }
 
+
+#based on https://install.portworx.com/?comp=pxoperator
 data "template_file" "portworx_operator" {
   template = <<EOF
 %{if var.portworx_enterprise.enable || var.portworx_essentials.enable}

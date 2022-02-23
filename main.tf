@@ -75,6 +75,8 @@ echo '${module.dev_cluster.platform.kubeconfig}' > .kubeconfig
 pwd
 chmod +x portworx-prereq.sh
 bash portworx-prereq.sh ${self.triggers.region}
+echo "portworx_operatory.yaml"
+cat ${self.triggers.installer_workspace}/portworx_operator.yaml
 oc apply -f ${self.triggers.installer_workspace}/portworx_operator.yaml
 echo "Sleeping for 5mins"
 sleep 300
