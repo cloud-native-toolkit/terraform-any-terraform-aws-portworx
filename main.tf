@@ -111,7 +111,7 @@ resource "null_resource" "portworx_cleanup_helper" {
   }
 
   provisioner "local-exec" {
-    # when = destroy
+    when = destroy
     # environment = {
     #   CLUSTER    = self.triggers.cluster_name
     #   KUBECONFIG = self.triggers.config_path
@@ -121,7 +121,7 @@ resource "null_resource" "portworx_cleanup_helper" {
     interpreter = ["/bin/bash", "-c"]
     command     = <<EOF
 echo '${module.dev_cluster.platform.kubeconfig}' > .kubeconfig
-curl -fsL https://install.portworx.com/px-wipe | bash
+curl -fsL https://install.portworx.com/px-wipe | bash -s -- -f
 EOF
   }
 }
