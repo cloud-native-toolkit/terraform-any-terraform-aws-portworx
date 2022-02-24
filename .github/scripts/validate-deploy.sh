@@ -2,10 +2,14 @@
 
 
 echo "sleeping for 5 mins to prevent synchronization errors"
-sleep 5m
+sleep 2m
 
 echo "checking for portworx services"
 
 oc rollout status daemonset/portworx-api -n kube-system
+
+
+sleep 8m
+
 
 exit 0

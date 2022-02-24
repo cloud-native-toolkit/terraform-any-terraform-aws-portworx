@@ -23,6 +23,22 @@ variable "region" {
 #   description = "Cluster ID"
 # }
 
+#variable "portworx_config" {
+#  type = object({
+#    type=string,
+#    cluster_id=string,
+#    enable_encryption=boolean,
+#    user_id=string,
+#    osb_endpoint=string
+#  })
+#  description = "Portworx configuration"
+#
+#  validation {
+#    condition     = contains(["enterprise","essentials"], var.portworx_config.type)
+#    error_message = "Allowed values for portworx_config.type are \"enterprise\", or \"essentials\"."
+#  }
+#}
+
 
 
 variable "portworx_enterprise" {
