@@ -14,9 +14,7 @@ module "aws_portworx" {
   region                = var.region
   access_key            = var.access_key
   secret_key            = var.secret_key
-  server_url            = var.server_url
-  cluster_username      = var.cluster_username
-  cluster_password      = var.cluster_password
+  cluster_config_file   = module.dev_cluster.platform.kubeconfig
   portworx_essentials   = local.portworx_essentials
   
 }

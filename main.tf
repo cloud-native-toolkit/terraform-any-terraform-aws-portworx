@@ -41,14 +41,14 @@ resource "local_file" "portworx_storagecluster_yaml" {
 #   }
 # }
 
-module "dev_cluster" {
-  source = "github.com/cloud-native-toolkit/terraform-ocp-login.git"
-
-  server_url = var.server_url
-  login_user = var.cluster_username
-  login_password = var.cluster_password
-  login_token = ""
-}
+#module "dev_cluster" {
+#  source = "github.com/cloud-native-toolkit/terraform-ocp-login.git"
+#
+#  server_url = var.server_url
+#  login_user = var.cluster_username
+#  login_password = var.cluster_password
+#  login_token = ""
+#}
 
 
 resource "null_resource" "install_portworx" {
@@ -67,7 +67,7 @@ resource "null_resource" "install_portworx" {
     }
     command     = <<EOF
 
-echo '${module.dev_cluster.platform.kubeconfig}' > .kubeconfig
+echo '${var.cluster_config_file}' > .kubeconfig
 
 pwd
 chmod +x portworx-prereq.sh
@@ -100,8 +100,8 @@ resource "null_resource" "portworx_cleanup_helper" {
   triggers = {
     installer_workspace = local.installer_workspace
     region              = var.region
-    kubeconfig = module.dev_cluster.platform.kubeconfig
-    px_cluster_id = local.px_cluster_id
+    kubeconfig          = var.cluster_config_file
+    px_cluster_id       = local.px_cluster_id
   }
 
   provisioner "local-exec" {

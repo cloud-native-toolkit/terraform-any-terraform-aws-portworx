@@ -83,17 +83,23 @@ variable "px_enable_csi" {
   description = "Enable CSI on PX"
 }
 
-variable cluster_username { 
+
+variable "cluster_config_file" {
   type        = string
-  description = "The username for AWS access"
+  description = "Cluster config file for Kubernetes cluster."
 }
 
-
-variable "cluster_password" {
-  type        = string
-  description = "The password for AWS access"
-}
-
-variable "server_url" {
-  type        = string
-}
+#variable cluster_username {
+#  type        = string
+#  description = "The username for AWS access"
+#}
+#
+#
+#variable "cluster_password" {
+#  type        = string
+#  description = "The password for AWS access"
+#}
+#
+#variable "server_url" {
+#  type        = string
+#}
