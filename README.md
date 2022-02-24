@@ -60,5 +60,5 @@ module "aws_portworx" {
 ```
 
 ## Acknowledgements
-This module is Derivative from https://github.com/ibm-hcbt/terraform-ibm-cloud-pak/tree/main/modules/portworx_aws
+This module is derivative from https://github.com/ibm-hcbt/terraform-ibm-cloud-pak/tree/main/modules/portworx_aws
 

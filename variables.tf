@@ -38,11 +38,11 @@ variable "portworx_config" {
     error_message = "Variable portworx_config.cluster_id is required."
   }
   validation {
-    condition     = var.portworx_config.type == "essentials" && length(var.portworx_config.user_id) > 0
+    condition     =  var.portworx_config.type == "enterprise" || (var.portworx_config.type == "essentials" && length(var.portworx_config.user_id) > 0)
     error_message = "Variable portworx_config.user_id value is required for type \"essentials\"."
   }
   validation {
-    condition     = var.portworx_config.type == "essentials" && length(var.portworx_config.osb_endpoint) > 0
+    condition     = var.portworx_config.type == "enterprise" || (var.portworx_config.type == "essentials" && length(var.portworx_config.osb_endpoint) > 0)
     error_message = "Variable portworx_config.osb_endpoint value is required for type \"essentials\"."
   }
 }
