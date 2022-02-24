@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-echo "sleeping for 5 mins to prevent synchronization errors"
+echo "sleeping for 2 mins to prevent synchronization errors"
 sleep 2m
 
 echo "checking for portworx services"

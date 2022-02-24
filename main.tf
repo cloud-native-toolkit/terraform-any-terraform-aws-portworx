@@ -124,7 +124,20 @@ resource "null_resource" "portworx_cleanup_helper" {
     interpreter = ["/bin/bash", "-c"]
     command     = <<EOF
 echo '${self.triggers.kubeconfig}' > .kubeconfig
+
+kubectl label daemonset/portworx-api name=portworx-api -
+n kube-system
+
 curl -fsL https://install.portworx.com/px-wipe | bash -s -- -f
+
+kubectl label nodes --all px/enabled=remove --overwrite
+
+kubectl get pods -o wide -n kube-system -l name=portworx
+
+VER=$(kubectl version --short | awk -Fv '/Server Version: /{print $3}')
+kubectl delete -f "https://install.portworx.com?ctl=true&kbver=$VER"
+
+kubectl label nodes --all px/enabled-
 EOF
   }
 }
@@ -142,15 +155,6 @@ resource "null_resource" "enable_portworx_encryption" {
 echo "Enabling encryption"
 PX_POD=$(oc get pods -l name=portworx -n kube-system -o jsonpath='{.items[0].metadata.name}')
 oc exec $PX_POD -n kube-system -- /opt/pwx/bin/pxctl secrets aws login
-
-kubectl label nodes --all px/enabled=remove --overwrite
-
-kubectl get pods -o wide -n kube-system -l name=portworx
-
-VER=$(kubectl version --short | awk -Fv '/Server Version: /{print $3}')
-kubectl delete -f "https://install.portworx.com?ctl=true&kbver=$VER"
-
-kubectl label nodes --all px/enabled-
 EOF
   }
   depends_on = [
