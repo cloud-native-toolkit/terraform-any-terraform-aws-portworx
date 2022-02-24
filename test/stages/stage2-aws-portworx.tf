@@ -8,7 +8,7 @@ locals {
   }
 }
 
-module "dev_tools_mymodule" {
+module "aws_portworx" {
   source = "./module"
 
   region                = var.region

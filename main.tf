@@ -50,11 +50,6 @@ module "dev_cluster" {
   login_token = ""
 }
 
-# resource null_resource output_kubeconfig {
-#   provisioner "local-exec" {
-#     command = "echo '${module.dev_cluster.platform.kubeconfig}' > .kubeconfig"
-#   }
-# }
 
 resource "null_resource" "install_portworx" {
   count = var.provision ? 1 : 0
@@ -116,11 +111,6 @@ resource "null_resource" "portworx_cleanup_helper" {
 
   provisioner "local-exec" {
     when = destroy
-    # environment = {
-    #   CLUSTER    = self.triggers.cluster_name
-    #   KUBECONFIG = self.triggers.config_path
-    #   BIN_DIR    = self.triggers.bin_dir
-    # }
 
     interpreter = ["/bin/bash", "-c"]
     command     = <<EOF
@@ -133,10 +123,9 @@ echo '${self.triggers.kubeconfig}' > .kubeconfig
 
 kubectl delete storagecluster ${self.triggers.px_cluster_id} -n kube-system
 
-until [ kubectl get storagecluster ${self.triggers.px_cluster_id} -n kube-system | grep NotFound ]; do
+while kubectl get storagecluster ${self.triggers.px_cluster_id} -n kube-system; do
   echo "waiting for storagecluster to destroy"
-  kubectl get storagecluster ${self.triggers.px_cluster_id} -n kube-system
-  sleep 30s
+  sleep 15s
 done
 echo "storagecluster destroyed"
 
