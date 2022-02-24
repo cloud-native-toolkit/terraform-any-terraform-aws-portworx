@@ -1,4 +1,4 @@
-source = "github.com/cloud-native-toolkit/terraform-ocp-login.git"
+
 module "dev_cluster" {
   source = "github.com/cloud-native-toolkit/terraform-ocp-login.git"
 
