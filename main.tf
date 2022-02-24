@@ -26,31 +26,6 @@ resource "local_file" "portworx_storagecluster_yaml" {
 }
 
 
-# resource "null_resource" "login_cluster" {
-#   triggers = {
-#     openshift_api       = var.openshift_api
-#     openshift_username  = var.openshift_username
-#     openshift_password  = var.openshift_password
-#     openshift_token     = var.openshift_token
-#     login_cmd = var.login_cmd
-#   }
-#   provisioner "local-exec" {
-#     command = <<EOF
-# ${self.triggers.login_cmd} --insecure-skip-tls-verify || oc login ${self.triggers.openshift_api} -u '${self.triggers.openshift_username}' -p '${self.triggers.openshift_password}' --insecure-skip-tls-verify=true || oc login --server='${self.triggers.openshift_api}' --token='${self.triggers.openshift_token}'
-# EOF
-#   }
-# }
-
-#module "dev_cluster" {
-#  source = "github.com/cloud-native-toolkit/terraform-ocp-login.git"
-#
-#  server_url = var.server_url
-#  login_user = var.cluster_username
-#  login_password = var.cluster_password
-#  login_token = ""
-#}
-
-
 resource "null_resource" "install_portworx" {
   count = var.provision ? 1 : 0
 
@@ -148,7 +123,7 @@ EOF
 
 
 resource "null_resource" "enable_portworx_encryption" {
-  count = var.portworx_enterprise.enable && var.portworx_enterprise.enable_encryption ? 1 : 0
+  count = var.provision && local.px_enterprise && var.portworx_config.enable_encryption ? 1 : 0
   triggers = {
     installer_workspace = local.installer_workspace
     region              = var.region
@@ -167,10 +142,11 @@ EOF
 }
 
 locals {
+  px_enterprise       = var.portworx_config.type == "enterprise"
   rootpath            = abspath(path.root)
   installer_workspace = "${local.rootpath}/installer-files"
-  px_cluster_id       = var.portworx_essentials.enable ? var.portworx_essentials.cluster_id : var.portworx_enterprise.cluster_id
+  px_cluster_id       = var.portworx_config.cluster_id
   priv_image_registry = "image-registry.openshift-image-registry.svc:5000/kube-system"
-  secret_provider     = var.portworx_enterprise.enable && var.portworx_enterprise.enable_encryption ? "aws-kms" : "k8s"
+  secret_provider     = var.provision && local.px_enterprise && var.portworx_config.enable_encryption ? "aws-kms" : "k8s"
   px_workspace        = "${local.installer_workspace}/ibm-px"
 }

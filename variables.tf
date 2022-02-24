@@ -18,49 +18,35 @@ variable "region" {
   description = "AWS Region the cluster is deployed in"
 }
 
-# variable "cluster_id" {
-#   type        = string
-#   description = "Cluster ID"
-# }
 
-#variable "portworx_config" {
-#  type = object({
-#    type=string,
-#    cluster_id=string,
-#    enable_encryption=boolean,
-#    user_id=string,
-#    osb_endpoint=string
-#  })
-#  description = "Portworx configuration"
-#
-#  validation {
-#    condition     = contains(["enterprise","essentials"], var.portworx_config.type)
-#    error_message = "Allowed values for portworx_config.type are \"enterprise\", or \"essentials\"."
-#  }
-#}
+variable "portworx_config" {
+  type = object({
+    type=string,
+    cluster_id=string,
+    enable_encryption=bool,
+    user_id=string,
+    osb_endpoint=string
+  })
+  description = "Portworx configuration"
 
-
-
-variable "portworx_enterprise" {
-  type        = map(string)
-  description = "See PORTWORX.md on how to get the Cluster ID."
-  default = {
-    enable            = false
-    cluster_id        = ""
-    enable_encryption = true
+  validation {
+    condition     = contains(["enterprise","essentials"], var.portworx_config.type)
+    error_message = "Allowed values for portworx_config.type are \"enterprise\", or \"essentials\"."
+  }
+  validation {
+    condition     = length(var.portworx_config.cluster_id) > 0
+    error_message = "Variable portworx_config.cluster_id is required."
+  }
+  validation {
+    condition     = var.portworx_config.type == "essentials" && length(var.portworx_config.user_id) > 0
+    error_message = "Variable portworx_config.user_id value is required for type \"essentials\"."
+  }
+  validation {
+    condition     = var.portworx_config.type == "essentials" && length(var.portworx_config.osb_endpoint) > 0
+    error_message = "Variable portworx_config.osb_endpoint value is required for type \"essentials\"."
   }
 }
 
-variable "portworx_essentials" {
-  type        = map(string)
-  description = "See PORTWORX-ESSENTIALS.md on how to get the Cluster ID, User ID and OSB Endpoint"
-  default = {
-    enable       = false
-    cluster_id   = ""
-    user_id      = ""
-    osb_endpoint = ""
-  }
-}
 
 variable "disk_size" {
   description = "Disk size for each Portworx volume"
@@ -88,18 +74,3 @@ variable "cluster_config_file" {
   type        = string
   description = "Cluster config file for Kubernetes cluster."
 }
-
-#variable cluster_username {
-#  type        = string
-#  description = "The username for AWS access"
-#}
-#
-#
-#variable "cluster_password" {
-#  type        = string
-#  description = "The password for AWS access"
-#}
-#
-#variable "server_url" {
-#  type        = string
-#}
