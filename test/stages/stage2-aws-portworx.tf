@@ -6,6 +6,7 @@ locals {
     user_id = var.px_user_id
     osb_endpoint = var.px_osb_endpoint
     type = "essentials"
+    enable_encryption = false
   }
 }
 
