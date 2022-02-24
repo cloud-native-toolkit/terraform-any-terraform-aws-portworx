@@ -1,10 +1,28 @@
-name: terraform-aws-portworx
+name: aws-portworx
 type: terraform
-description: 'Module to provision terraform-aws-portworx on '
+description: 'Module to provision terraform-aws-portworx on a redhat rosa cluster'
 tags:
   - tools
   - devops
 versions:
-  - platforms: []
-    dependencies: []
-    variables: []
+  - platforms:
+      - ocp4
+    providers:
+      - name: aws
+        source: "hashicorp/aws"
+    dependencies:
+      - id: cluster
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ocp-login.git
+            version: ">= 1.2.4"
+    variables:
+      - name: cluster_config_file
+        moduleRef:
+          id: cluster
+          output: config_file_path
+      - name: region
+        scope: global
+      - name: access_key
+        scope: global
+      - name: secret_key
+        scope: global
