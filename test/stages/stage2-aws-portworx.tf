@@ -1,10 +1,10 @@
 
 locals {
   portworx_config = {
-    cluster_id = "px-cluster-7ae83260-f2f9-4d6e-aa93-8f11c1dc0ee9"
-    user_id = ""
-    osb_endpoint = ""
-    type = "enterprise"
+    cluster_id = var.px_cluster_id
+    user_id = var.px_user_id
+    osb_endpoint = var.px_osb_endpoint
+    type = "essentials"
     enable_encryption = false
   }
 }
