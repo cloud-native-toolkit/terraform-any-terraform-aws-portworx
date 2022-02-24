@@ -106,6 +106,7 @@ resource "null_resource" "portworx_cleanup_helper" {
     installer_workspace = local.installer_workspace
     region              = var.region
     kubeconfig = module.dev_cluster.platform.kubeconfig
+    px_cluster_id = local.px_cluster_id
   }
 
   provisioner "local-exec" {
@@ -125,10 +126,33 @@ resource "null_resource" "portworx_cleanup_helper" {
     command     = <<EOF
 echo '${self.triggers.kubeconfig}' > .kubeconfig
 
-kubectl label daemonset/portworx-api name=portworx-api -
-│ n kube-system
+#kubectl label daemonset/portworx-api name=portworx-api -
+#│ n kube-system
+#
+#curl -fsL https://install.portworx.com/px-wipe | bash -s -- -f
 
-curl -fsL https://install.portworx.com/px-wipe | bash -s -- -f
+kubectl delete storagecluster ${self.triggers.px_cluster_id} -n kube-system
+
+until [ kubectl get storagecluster ${self.triggers.px_cluster_id} -n kube-system | grep NotFound ]; do
+  echo "waiting for storagecluster to destroy"
+  kubectl get storagecluster ${self.triggers.px_cluster_id} -n kube-system
+  sleep 30s
+done
+echo "storagecluster destroyed"
+
+
+kubectl delete secret px-essential -n kube-system
+
+kubectl delete deployment portworx-operator -n kube-system
+kubectl delete ClusterRoleBinding portworx-operator -n kube-system
+kubectl delete ClusterRole portworx-operator -n kube-system
+kubectl delete PodSecurityPolicy portworx-operator -n kube-system
+kubectl delete ServiceAccount portworx-operator -n kube-system
+
+kubectl get sc | grep portworx | awk '{print $1}' | while read -r SC; do
+  kubectl delete storageclass $SC
+done
+
 EOF
   }
 }
