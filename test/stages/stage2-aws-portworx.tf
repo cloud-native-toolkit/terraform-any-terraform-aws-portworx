@@ -17,5 +17,5 @@ module "aws_portworx" {
   access_key            = var.access_key
   secret_key            = var.secret_key
   cluster_config_file   = module.dev_cluster.platform.kubeconfig
-  portworx_config   = local.portworx_config
+  portworx_config       = local.portworx_config
 }
