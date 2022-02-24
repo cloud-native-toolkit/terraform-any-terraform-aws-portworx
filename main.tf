@@ -129,15 +129,6 @@ kubectl label daemonset/portworx-api name=portworx-api -
 n kube-system
 
 curl -fsL https://install.portworx.com/px-wipe | bash -s -- -f
-
-kubectl label nodes --all px/enabled=remove --overwrite
-
-kubectl get pods -o wide -n kube-system -l name=portworx
-
-VER=$(kubectl version --short | awk -Fv '/Server Version: /{print $3}')
-kubectl delete -f "https://install.portworx.com?ctl=true&kbver=$VER"
-
-kubectl label nodes --all px/enabled-
 EOF
   }
 }
