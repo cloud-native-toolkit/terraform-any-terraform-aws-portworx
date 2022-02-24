@@ -7,7 +7,12 @@ Terraform module to install Portworx into an OCP/ROSA cluster on AWS, compatible
 
 ### Prerequisites
 
-This module requires a portworx configuration.   
+This module requires a Portworx configuration.   Portworx is available in 2 flavors: `Enterprise` and `Essentials`.   
+
+*Portworx Essentials* is free forever, but only supports a maximum of 5 nodes on a cluster, 200 volumes, and 5TB of storage.   
+*Portworx Enterprise* requires a subscription (has 30 day free trial), supports over 1000 nodes per cluster, and has unlimited storage.
+
+More detailed comparisons are available at: https://portworx.com/products/features/
 
 Instructions for obtaining your portworx configuration are available at:
 - [Portworx Essentials](./PORTWORX_ESSENTIALS.md)
