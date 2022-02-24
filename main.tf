@@ -125,7 +125,7 @@ resource "null_resource" "portworx_cleanup_helper" {
     command     = <<EOF
 echo '${self.triggers.kubeconfig}' > .kubeconfig
 
-kubectl label daemonset/portworx-api name=portworx-api -
+kubectl label daemonset/portworx-api name=portworx -
 n kube-system
 
 curl -fsL https://install.portworx.com/px-wipe | bash -s -- -f

@@ -8,3 +8,6 @@ echo "checking for portworx services"
 
 oc rollout status daemonset/portworx-api -n kube-system
 
+
+
+exit 0
