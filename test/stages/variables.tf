@@ -44,3 +44,8 @@ variable "px_user_id" {
 variable "px_osb_endpoint" {
   type        = string
 }
+
+variable "cloud_provider" {
+  type        = string
+  description = "Cloud provider (aws or azure)"
+}

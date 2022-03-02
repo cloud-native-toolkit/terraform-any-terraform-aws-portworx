@@ -74,3 +74,14 @@ variable "cluster_config_file" {
   type        = string
   description = "Cluster config file for Kubernetes cluster."
 }
+
+
+variable "cloud_provider" {
+  type        = string
+  description = "Cloud provider (aws or azure)"
+
+  validation {
+    condition     = contains(["aws", "azure"], var.cloud_provider)
+    error_message = "Allowed values for cloud_provider are \"aws\", or \"azure\"."
+  }
+}

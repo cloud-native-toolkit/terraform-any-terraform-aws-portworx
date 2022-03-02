@@ -1,4 +1,5 @@
 resource "aws_kms_key" "px_key" {
+  count       = var.cloud_provider == "aws" ? 1:0
   description = "Key used to encrypt Portworx PVCs"
 }
 
@@ -45,7 +46,9 @@ resource "null_resource" "install_portworx" {
 echo '${var.cluster_config_file}' > .kubeconfig
 
 pwd
-chmod +x portworx-prereq.sh
+chmod +x ${var.cloud_provider}/portworx-prereq.sh
+bash ${var.cloud_provider}/portworx-prereq.sh ${self.triggers.region}
+
 cat ${self.triggers.installer_workspace}/portworx_operator.yaml
 oc apply -f ${self.triggers.installer_workspace}/portworx_operator.yaml
 echo "Sleeping for 5mins"
@@ -128,6 +131,7 @@ resource "null_resource" "enable_portworx_encryption" {
     installer_workspace = local.installer_workspace
     region              = var.region
   }
+  #todo: fix for both azure/aws
   provisioner "local-exec" {
     when    = create
     command = <<EOF
@@ -147,6 +151,8 @@ locals {
   installer_workspace = "${local.rootpath}/installer-files"
   px_cluster_id       = var.portworx_config.cluster_id
   priv_image_registry = "image-registry.openshift-image-registry.svc:5000/kube-system"
+
+  #todo: fix for azure + aws
   secret_provider     = var.provision && local.px_enterprise && var.portworx_config.enable_encryption ? "aws-kms" : "k8s"
   px_workspace        = "${local.installer_workspace}/ibm-px"
 }

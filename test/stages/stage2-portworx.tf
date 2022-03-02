@@ -9,7 +9,7 @@ locals {
   }
 }
 
-module "aws_portworx" {
+module "portworx" {
   source = "./module"
 
   region                = var.region
@@ -17,4 +17,5 @@ module "aws_portworx" {
   secret_key            = var.secret_key
   cluster_config_file   = module.dev_cluster.platform.kubeconfig
   portworx_config       = local.portworx_config
+  cloud_provider        = var.cloud_provider
 }
