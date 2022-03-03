@@ -55,7 +55,7 @@ jobs:
             echo "::set-output name=CLUSTER_USERNAME::$AWS_CLUSTER_USERNAME"
             echo "::set-output name=CLUSTER_PASSWORD::$AWS_CLUSTER_PASSWORD"
             echo "::set-output name=CLOUD_PROVIDER::aws"
-          else if [[ $ENVIRONMENT =~ ^azure ]]; then
+          elif [[ $ENVIRONMENT =~ ^azure ]]; then
             echo "::set-output name=CLUSTER_USERNAME::$AZURE_CLUSTER_USERNAME"
             echo "::set-output name=CLUSTER_PASSWORD::$AZURE_CLUSTER_PASSWORD"
             echo "::set-output name=CLOUD_PROVIDER::azure"
@@ -79,7 +79,6 @@ jobs:
           IBM_CLUSTER_PASSWORD: ${{ secrets.IBMCLOUD_API_KEY }}
           ENVIRONMENT: ${{ matrix.testcase }}
 
-          #todo: are these all needed?
           TF_VAR_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
