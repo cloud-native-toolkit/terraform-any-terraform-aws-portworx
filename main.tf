@@ -41,8 +41,6 @@ resource "null_resource" "install_portworx" {
       AWS_SECRET_ACCESS_KEY = var.secret_key
     }
     command     = <<EOF
-echo '${var.cluster_config_file}'
-cat ${var.cluster_config_file} > ~/.kube/config
 echo '${var.cluster_config_file}' > .kubeconfig
 export KUBECONFIG=${var.cluster_config_file}:$KUBECONFIG
 
