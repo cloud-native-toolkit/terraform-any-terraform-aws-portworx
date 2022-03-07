@@ -15,10 +15,9 @@ spec:
   cloudStorage:
     deviceSpecs:
 %{if var.cloud_provider == "aws"}
-    - type=gp2,size=${var.disk_size},enc=true,kms=${aws_kms_key.px_key[0].key_id}
+#    - type=gp2,size=${var.disk_size},enc=true,kms=${aws_kms_key.px_key[0].key_id}
 %{endif}
 %{if var.cloud_provider == "azure"}
-    - type=gp2,size=${var.disk_size},enc=true,kms=${aws_kms_key.px_key[0].key_id}
     - type=Premium_LRS,size=${var.kvdb_disk_size}
 %{endif}
     kvdbDeviceSpec: type=gp2,size=${var.kvdb_disk_size}
