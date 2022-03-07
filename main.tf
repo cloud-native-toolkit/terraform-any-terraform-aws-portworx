@@ -41,11 +41,12 @@ resource "null_resource" "install_portworx" {
       AWS_SECRET_ACCESS_KEY = var.secret_key
     }
     command     = <<EOF
-
 echo '${var.cluster_config_file}' > .kubeconfig
+export KUBECONFIG=${var.cluster_config_file}:$KUBECONFIG
 
 pwd
 chmod +x portworx-prereq.sh
+bash portworx-prereq.sh ${self.triggers.region}
 cat ${self.triggers.installer_workspace}/portworx_operator.yaml
 oc apply -f ${self.triggers.installer_workspace}/portworx_operator.yaml
 echo "Sleeping for 5mins"
