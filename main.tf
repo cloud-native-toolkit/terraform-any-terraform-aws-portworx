@@ -42,6 +42,7 @@ resource "null_resource" "install_portworx" {
     }
     command     = <<EOF
 echo '${var.cluster_config_file}'
+cat ${var.cluster_config_file}
 echo '${var.cluster_config_file}' > .kubeconfig
 
 pwd
