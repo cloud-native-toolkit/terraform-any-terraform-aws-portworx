@@ -145,7 +145,7 @@ EOF
 
 locals {
   px_enterprise       = var.portworx_config.type == "enterprise"
-  rootpath            = abspath(path.root)
+  rootpath            = path.cwd
   installer_workspace = "${local.rootpath}/installer-files"
   px_cluster_id       = var.portworx_config.cluster_id
   priv_image_registry = "image-registry.openshift-image-registry.svc:5000/kube-system"
