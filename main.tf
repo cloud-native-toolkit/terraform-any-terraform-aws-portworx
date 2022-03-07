@@ -1,7 +1,7 @@
-resource "aws_kms_key" "px_key" {
-  count       = var.cloud_provider == "aws" ? 1:0
-  description = "Key used to encrypt Portworx PVCs"
-}
+#resource "aws_kms_key" "px_key" {
+#  count       = var.cloud_provider == "aws" ? 1:0
+#  description = "Key used to encrypt Portworx PVCs"
+#}
 
 resource "null_resource" "create_workspace" {
   provisioner "local-exec" {
@@ -153,6 +153,7 @@ locals {
   priv_image_registry = "image-registry.openshift-image-registry.svc:5000/kube-system"
 
   #todo: fix for azure + aws
-  secret_provider     = var.provision && local.px_enterprise && var.portworx_config.enable_encryption ? "aws-kms" : "k8s"
+  #secret_provider     = var.provision && local.px_enterprise && var.portworx_config.enable_encryption ? "aws-kms" : "k8s"
+  secret_provider     = "k8s"
   px_workspace        = "${local.installer_workspace}/ibm-px"
 }
