@@ -42,8 +42,9 @@ resource "null_resource" "install_portworx" {
     }
     command     = <<EOF
 echo '${var.cluster_config_file}'
-cat ${var.cluster_config_file}
+cat ${var.cluster_config_file} > ~/.kube/config
 echo '${var.cluster_config_file}' > .kubeconfig
+export KUBECONFIG=${var.cluster_config_file}:$KUBECONFIG
 
 pwd
 chmod +x portworx-prereq.sh
@@ -145,7 +146,7 @@ EOF
 
 locals {
   px_enterprise       = var.portworx_config.type == "enterprise"
-  rootpath            = path.cwd
+  rootpath            = abspath(path.root)
   installer_workspace = "${local.rootpath}/installer-files"
   px_cluster_id       = var.portworx_config.cluster_id
   priv_image_registry = "image-registry.openshift-image-registry.svc:5000/kube-system"
