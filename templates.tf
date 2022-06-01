@@ -3,13 +3,13 @@ data "template_file" "aws_efs_operator" {
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: aws-efs-operator
-  namespace: openshift-operators
+  name: aws-efs-csi-driver-operator
+  namespace: openshift-cluster-csi-drivers
 spec:
   channel: stable
   installPlanApproval: Automatic
-  name: aws-efs-operator
-  source: community-operators
+  name: aws-efs-csi-driver-operator
+  source: redhat-operators
   sourceNamespace: openshift-marketplace
 EOF
 }
@@ -152,7 +152,7 @@ spec:
       containers:
       - name: portworx-operator
         imagePullPolicy: Always
-        image: portworx/px-operator:1.7.0
+        image: portworx/px-operator:1.8.0
         command:
         - /operator
         - --verbose
