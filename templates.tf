@@ -1,3 +1,23 @@
+data "template_file" "aws_efs_operator" {
+  template = <<EOF
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: aws-efs-operator
+  namespace: openshift-operators
+  labels:
+    operators.coreos.com/aws-efs-operator.openshift-operators: ''
+spec:
+  channel: stable
+  installPlanApproval: Automatic
+  name: aws-efs-operator
+  source: community-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: aws-efs-operator.v0.0.8
+EOF
+}
+
+
 data "template_file" "portworx_storagecluster" {
   template = <<EOF
 kind: StorageCluster

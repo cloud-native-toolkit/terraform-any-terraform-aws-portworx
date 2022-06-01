@@ -25,6 +25,11 @@ resource "local_file" "portworx_storagecluster_yaml" {
   filename = "${local.installer_workspace}/portworx_storagecluster.yaml"
 }
 
+resource "local_file" "aws_efs_operator_yaml" {
+  content  = data.template_file.aws_efs_operator.rendered
+  filename = "${local.installer_workspace}/aws_efs_operator.yaml"
+}
+
 
 resource "null_resource" "install_portworx" {
   count = var.provision ? 1 : 0
