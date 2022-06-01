@@ -5,15 +5,12 @@ kind: Subscription
 metadata:
   name: aws-efs-operator
   namespace: openshift-operators
-  labels:
-    operators.coreos.com/aws-efs-operator.openshift-operators: ''
 spec:
   channel: stable
   installPlanApproval: Automatic
   name: aws-efs-operator
   source: community-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: aws-efs-operator.v0.0.8
 EOF
 }
 
