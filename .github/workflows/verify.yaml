@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         testcase:
-          - aws_latest_gitops
+          - aws_portworx_gitops
       fail-fast: false
 
     env:

@@ -25,6 +25,11 @@ resource "local_file" "portworx_storagecluster_yaml" {
   filename = "${local.installer_workspace}/portworx_storagecluster.yaml"
 }
 
+resource "local_file" "aws_efs_operator_yaml" {
+  content  = data.template_file.aws_efs_operator.rendered
+  filename = "${local.installer_workspace}/aws_efs_operator.yaml"
+}
+
 
 resource "null_resource" "install_portworx" {
   count = var.provision ? 1 : 0
@@ -47,6 +52,8 @@ export KUBECONFIG=${var.cluster_config_file}:$KUBECONFIG
 pwd
 chmod +x portworx-prereq.sh
 bash portworx-prereq.sh ${self.triggers.region}
+cat ${self.triggers.installer_workspace}/aws_efs_operator.yaml
+oc apply -f ${self.triggers.installer_workspace}/aws_efs_operator.yaml
 cat ${self.triggers.installer_workspace}/portworx_operator.yaml
 oc apply -f ${self.triggers.installer_workspace}/portworx_operator.yaml
 echo "Sleeping for 5mins"

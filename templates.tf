@@ -1,3 +1,20 @@
+data "template_file" "aws_efs_operator" {
+  template = <<EOF
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: aws-efs-csi-driver-operator
+  namespace: openshift-cluster-csi-drivers
+spec:
+  channel: stable
+  installPlanApproval: Automatic
+  name: aws-efs-csi-driver-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+EOF
+}
+
+
 data "template_file" "portworx_storagecluster" {
   template = <<EOF
 kind: StorageCluster
@@ -8,7 +25,7 @@ metadata:
   annotations:%{if !local.px_enterprise }${indent(4, "\nportworx.io/misc-args: \"--oem esse\"")}%{endif}
     portworx.io/is-openshift: "true"
 spec:
-  image: portworx/oci-monitor:2.7.0
+  image: portworx/oci-monitor:2.9.0
   imagePullPolicy: Always
   kvdb:
     internal: true
@@ -135,7 +152,7 @@ spec:
       containers:
       - name: portworx-operator
         imagePullPolicy: Always
-        image: portworx/px-operator:1.7.0
+        image: portworx/px-operator:1.8.0
         command:
         - /operator
         - --verbose
