@@ -60,6 +60,65 @@ versions:
         moduleRef:
           id: cluster
           output: config_file_path
+    version: v0.0.5
+    outputs:
+      - name: default_rwx_storage_class
+        description: Default read-write-many storage class
+  - platforms:
+      - ocp4
+    providers:
+      - name: aws
+        source: hashicorp/aws
+    dependencies:
+      - id: cluster
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ocp-login.git
+            version: '>= 1.2.4'
+    variables:
+      - name: provision
+        default: 'true'
+        description: If set to true installs Portworx on the given cluster
+      - name: access_key
+        type: string
+        default: ''
+        scope: global
+      - name: secret_key
+        type: string
+        default: ''
+        scope: global
+      - name: region
+        type: string
+        description: AWS Region the cluster is deployed in
+        scope: global
+      - name: portworx_config
+        type: |-
+          object({
+              type=string,
+              cluster_id=string,
+              enable_encryption=bool,
+              user_id=string,
+              osb_endpoint=string
+            })
+        description: Portworx configuration
+      - name: disk_size
+        description: Disk size for each Portworx volume
+        default: '1000'
+      - name: kvdb_disk_size
+        default: '450'
+      - name: px_enable_monitoring
+        type: bool
+        default: true
+        description: Enable monitoring on PX
+      - name: px_enable_csi
+        type: bool
+        default: true
+        description: Enable CSI on PX
+      - name: cluster_config_file
+        type: string
+        description: Cluster config file for Kubernetes cluster.
+        moduleRef:
+          id: cluster
+          output: config_file_path
     version: v0.0.4
     outputs:
       - name: default_rwx_storage_class
