@@ -1,3 +1,33 @@
+locals {
+  #px_enterprise       = var.portworx_config.type == "enterprise"
+  px_enterprise       = data.external.portworx_config.result.type == "enterprise"
+  rootpath            = abspath(path.root)
+  installer_workspace = "${local.rootpath}/installer-files"
+  #px_cluster_id       = var.portworx_config.cluster_id
+  px_cluster_id       = data.external.portworx_config.result.cluster_id
+  priv_image_registry = "image-registry.openshift-image-registry.svc:5000/kube-system"
+  
+  secret_provider     = var.provision && local.px_enterprise && var.enable_encryption ? "aws-kms" : "k8s"
+  px_workspace        = "${local.installer_workspace}/ibm-px"
+  portworx_spec       = var.portworx_spec_file != null && var.portworx_spec_file != "" ? base64encode(file(var.portworx_spec_file)) : var.portworx_spec  
+}
+
+module setup_clis {
+  source = "cloud-native-toolkit/clis/util"
+  version = "1.16.0"
+
+  clis = ["kubectl", "oc", "yq4", "jq","aws"]
+}
+
+data external portworx_config {
+  program = ["bash", "${path.module}/scripts/parse-portworx-config.sh"]
+
+  query = {
+    bin_dir = module.setup_clis.bin_dir
+    portworx_spec = local.portworx_spec
+  }
+}
+
 resource "aws_kms_key" "px_key" {
   description = "Key used to encrypt Portworx PVCs"
 }
@@ -131,7 +161,8 @@ EOF
 
 
 resource "null_resource" "enable_portworx_encryption" {
-  count = var.provision && local.px_enterprise && var.portworx_config.enable_encryption ? 1 : 0
+  #count = var.provision && local.px_enterprise && var.enable_encryption ? 1 : 0
+  count = var.provision && var.enable_encryption ? 1 : 0
   triggers = {
     installer_workspace = local.installer_workspace
     region              = var.region
@@ -149,12 +180,3 @@ EOF
   ]
 }
 
-locals {
-  px_enterprise       = var.portworx_config.type == "enterprise"
-  rootpath            = abspath(path.root)
-  installer_workspace = "${local.rootpath}/installer-files"
-  px_cluster_id       = var.portworx_config.cluster_id
-  priv_image_registry = "image-registry.openshift-image-registry.svc:5000/kube-system"
-  secret_provider     = var.provision && local.px_enterprise && var.portworx_config.enable_encryption ? "aws-kms" : "k8s"
-  px_workspace        = "${local.installer_workspace}/ibm-px"
-}

@@ -14,9 +14,23 @@
 
 * In the `Advanced Settings` tab select all three options and press Finish:
 
+* Download the spec file. 
+
+
+<!-- 
 * Copy Spec URL and Paste in a browser:
 
 * From the yaml spec, copy the following values for use in Terraform execution.
   * `metadata.name` will be the value for the `portworx_config.px_generated_cluster_id` variable
   * `data.px-essen-userid` will be used for the `portworx_config.user_id` variable
-  * `data.px-osb-endpoint` will be used for the `portworx_config.osb_endpoint` variable
+  * `data.px-osb-endpoint` will be used for the `portworx_config.osb_endpoint` variable -->
+
+
+* Convert the contents for the file to base64 encoding 
+  echo <portworx_essentials_xxxxx.yaml> | base64
+
+* Convert the contents for the file to base64 encoding 
+
+* Copy the base64 encoding output and  set as value for terraform `portworx_spec` variable to use in Terraform execution.
+
+

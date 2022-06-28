@@ -33,14 +33,25 @@ variable "secret_key" {
 }
 
 
-variable "px_cluster_id" {
-  type        = string
+# variable "px_cluster_id" {
+#   type        = string
+# }
+
+# variable "px_user_id" {
+#   type        = string
+# }
+
+# variable "px_osb_endpoint" {
+#   type        = string
+# }
+
+variable "portworx_spec" {
+  type = string
+  default = ""
 }
 
-variable "px_user_id" {
-  type        = string
-}
-
-variable "px_osb_endpoint" {
-  type        = string
+variable "portworx_spec_file" {
+  type = string
+  description = "The path to the file that contains the yaml spec for the Portworx config. Either the `portworx_spec_file` or `portworx_spec` must be provided. The instructions for creating this configuration can be found at https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/PORTWORX_CONFIG.md"
+  default = ""
 }
