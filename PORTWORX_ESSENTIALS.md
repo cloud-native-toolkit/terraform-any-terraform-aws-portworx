@@ -29,8 +29,6 @@
 * Convert the contents for the file to base64 encoding 
   echo <portworx_essentials_xxxxx.yaml> | base64
 
-* Convert the contents for the file to base64 encoding 
-
 * Copy the base64 encoding output and  set as value for terraform `portworx_spec` variable to use in Terraform execution.
 
 

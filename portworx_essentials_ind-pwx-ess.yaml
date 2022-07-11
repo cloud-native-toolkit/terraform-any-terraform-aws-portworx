@@ -1,0 +1,40 @@
+kind: StorageCluster
+apiVersion: core.libopenstorage.org/v1
+metadata:
+  name: px-cluster-43b466d8-374b-4446-b00e-1755ef7c7d3f
+  namespace: kube-system
+  annotations:
+    portworx.io/install-source: "https://install.portworx.com/?operator=true&mc=false&kbver=&oem=esse&user=a41eb1d4-2e06-43d9-bd87-3b7e97882b0f&b=true&kd=type%3Dgp2%2Csize%3D150&s=%22type%3Dgp2%2Csize%3D1000%22&c=px-cluster-43b466d8-374b-4446-b00e-1755ef7c7d3f&osft=true&stork=true&csi=true&mon=true&tel=false&st=k8s&promop=true"
+    portworx.io/is-openshift: "true"
+    portworx.io/misc-args: "--oem esse"
+spec:
+  image: portworx/oci-monitor:2.9.1.4
+  imagePullPolicy: Always
+  kvdb:
+    internal: true
+  cloudStorage:
+    deviceSpecs:
+    - type=gp2,size=1000
+    kvdbDeviceSpec: type=gp2,size=150
+  secretsProvider: k8s
+  stork:
+    enabled: true
+    args:
+      webhook-controller: "false"
+  autopilot:
+    enabled: true
+  monitoring:
+    prometheus:
+      enabled: true
+      exportMetrics: true
+  featureGates:
+    CSI: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: px-essential
+  namespace: kube-system
+data:
+  px-essen-user-id: YTQxZWIxZDQtMmUwNi00M2Q5LWJkODctM2I3ZTk3ODgyYjBm
+  px-osb-endpoint: aHR0cHM6Ly9weGVzc2VudGlhbHMucG9ydHdvcnguY29tL29zYi9iaWxsaW5nL3YxL3JlZ2lzdGVy
