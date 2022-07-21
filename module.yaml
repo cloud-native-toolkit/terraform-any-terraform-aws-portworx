@@ -26,3 +26,9 @@ versions:
         scope: global
       - name: secret_key
         scope: global
+      - name: enable_encryption
+        important: true
+      - name: portworx_spec_file
+        important: true
+      - name: portworx_spec
+        important: true
