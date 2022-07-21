@@ -44,4 +44,3 @@ fi
 #kubectl exec "${PX_POD}" -n kube-system -- /opt/pwx/bin/pxctl status
 
 exit 0
-=====
