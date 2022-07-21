@@ -28,7 +28,7 @@ echo "checking for portworx services"
 
 # exit 0
 
-===
+
 
 oc rollout status deployment/portworx-operator -n kube-system
 
