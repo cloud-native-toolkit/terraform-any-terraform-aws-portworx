@@ -12,6 +12,8 @@ versions:
     providers:
       - name: aws
         source: "hashicorp/aws"
+      - name: clis
+        source: cloud-native-toolkit/clis
     dependencies:
       - id: cluster
         refs:

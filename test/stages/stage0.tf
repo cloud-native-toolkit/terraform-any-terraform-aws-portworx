@@ -1,14 +1,31 @@
 terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+    local = {
+      source = "hashicorp/local"
+    }
+    null = {
+      source = "hashicorp/null"
+    }
+    template = {
+      source = "hashicorp/template"
+    }
+    clis = {
+      source  = "cloud-native-toolkit/clis"
+    }
+  }
 }
-module setup_clis {
-  source = "github.com/cloud-native-toolkit/terraform-util-clis.git"
 
-  bin_dir = "${path.cwd}/test_bin_dir"
-  clis = ["kubectl", "oc", "ibmcloud-is"]
+data clis_check clis1 {
+  provider = clis.clis1
+
+  clis = ["kubectl", "oc"]
 }
 
 resource local_file bin_dir {
   filename = "${path.cwd}/.bin_dir"
 
-  content = module.setup_clis.bin_dir
+  content = data.clis_check.clis1.bin_dir
 }

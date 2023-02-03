@@ -121,5 +121,5 @@ variable "default_file_storage_class" {
 variable "default_block_storage_class" {
   type        = string
   description = "The default storage class that should be used for block volumes"
-  default     = "ibmc-vpc-block-10iops-tier"
+  default     = "gp2"
 }
