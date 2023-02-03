@@ -12,18 +12,15 @@ locals {
   portworx_spec       = var.portworx_spec_file != null && var.portworx_spec_file != "" ? base64encode(file(var.portworx_spec_file)) : var.portworx_spec  
 }
 
-module setup_clis {
-  source = "cloud-native-toolkit/clis/util"
-  version = "1.16.0"
-
-  clis = ["kubectl", "oc", "yq4", "jq","aws"]
+data clis_check clis {
+  clis = ["kubectl", "oc", "yq", "jq", "aws"]
 }
 
 data external portworx_config {
   program = ["bash", "${path.module}/scripts/parse-portworx-config.sh"]
 
   query = {
-    bin_dir = module.setup_clis.bin_dir
+    bin_dir = data.clis_check.clis.bin_dir
     portworx_spec = local.portworx_spec
   }
 }
@@ -71,7 +68,7 @@ resource "null_resource" "install_portworx_prereq" {
   triggers = {
     installer_workspace = local.installer_workspace
     kubeconfig          = var.cluster_config_file
-    BIN_DIR = module.setup_clis.bin_dir
+    BIN_DIR = data.clis_check.clis.bin_dir
     region  = var.region
     access_key= var.access_key
     secret_key = var.secret_key
@@ -145,7 +142,7 @@ resource "null_resource" "install_portworx" {
     installer_workspace = local.installer_workspace
     kubeconfig          = var.cluster_config_file
     px_cluster_id       = local.px_cluster_id
-    BIN_DIR = module.setup_clis.bin_dir
+    BIN_DIR = data.clis_check.clis.bin_dir
 
   }
   provisioner "local-exec" {
@@ -175,7 +172,7 @@ resource "null_resource" "enable_portworx_encryption" {
   count = var.provision && var.enable_encryption ? 1 : 0
   triggers = {
     installer_workspace = local.installer_workspace
-    bin_dir = module.setup_clis.bin_dir
+    bin_dir = data.clis_check.clis.bin_dir
     kubeconfig          = var.cluster_config_file
   }
   #todo: fix for both azure/aws

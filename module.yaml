@@ -1,4 +1,6 @@
 name: aws-portworx
+interfaces:
+  - github.com/cloud-native-toolkit/automation-modules#cluster-storage
 type: terraform
 description: 'Module to provision terraform-aws-portworx on a redhat rosa cluster'
 tags:
@@ -10,6 +12,8 @@ versions:
     providers:
       - name: aws
         source: "hashicorp/aws"
+      - name: clis
+        source: cloud-native-toolkit/clis
     dependencies:
       - id: cluster
         refs:
