@@ -69,6 +69,93 @@ versions:
         description: Flag indicating portworx volumes should be encrypted
         default: false
         important: true
+      - name: default_rwx_storage_class
+        type: string
+        description: The default storage class that should be used for RWX volumes
+        default: portworx-rwx-gp3-sc
+      - name: default_rwo_storage_class
+        type: string
+        description: The default storage class that should be used for RWO volumes
+        default: portworx-gp3-sc
+      - name: default_file_storage_class
+        type: string
+        description: The default storage class that should be used for file volumes
+        default: portworx-gp3-sc
+      - name: default_block_storage_class
+        type: string
+        description: The default storage class that should be used for block volumes
+        default: ibmc-vpc-block-10iops-tier
+    version: v0.2.0
+    outputs:
+      - name: rwx_storage_class
+      - name: rwo_storage_class
+      - name: file_storage_class
+      - name: block_storage_class
+      - name: storage_classes_provided
+  - platforms:
+      - ocp4
+    providers:
+      - name: aws
+        source: hashicorp/aws
+    dependencies:
+      - id: cluster
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ocp-login.git
+            version: '>= 1.2.4'
+    variables:
+      - name: provision
+        default: 'true'
+        description: If set to true installs Portworx on the given cluster
+      - name: access_key
+        type: string
+        default: ''
+        scope: global
+      - name: secret_key
+        type: string
+        default: ''
+        scope: global
+      - name: region
+        type: string
+        description: AWS Region the cluster is deployed in
+        scope: global
+      - name: disk_size
+        description: Disk size for each Portworx volume
+        default: '1000'
+      - name: kvdb_disk_size
+        default: '450'
+      - name: px_enable_monitoring
+        type: bool
+        default: true
+        description: Enable monitoring on PX
+      - name: px_enable_csi
+        type: bool
+        default: true
+        description: Enable CSI on PX
+      - name: cluster_config_file
+        type: string
+        description: Cluster config file for Kubernetes cluster.
+        moduleRef:
+          id: cluster
+          output: config_file_path
+      - name: portworx_spec
+        type: string
+        default: ''
+        important: true
+      - name: portworx_spec_file
+        type: string
+        description: >-
+          The path to the file that contains the yaml spec for the Portworx
+          config. Either the `portworx_spec_file` or `portworx_spec` must be
+          provided. The instructions for creating this configuration can be
+          found at
+          https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/PORTWORX_CONFIG.md
+        default: ''
+        important: true
+      - name: enable_encryption
+        type: bool
+        description: Flag indicating portworx volumes should be encrypted
+        default: false
+        important: true
     version: v0.1.0
     outputs: []
   - platforms:
@@ -367,3 +454,5 @@ versions:
       - name: default_rwx_storage_class
         description: Default read-write-many storage class
 id: github.com/cloud-native-toolkit/terraform-aws-portworx
+interfaces:
+  - github.com/cloud-native-toolkit/automation-modules#cluster-storage
